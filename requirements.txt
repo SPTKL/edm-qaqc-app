@@ -1,2 +1,3 @@
 dash==1.8.0
 requests
+gunicorn
