@@ -1,0 +1,34 @@
+version: 2
+
+# Run the welcome/run job in its own container
+jobs:
+  build:
+    docker:
+      - image: python:3.7-alpine
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Install Docker client
+          command: |
+            set -x
+            VER="19.03.1"
+            curl -L -o /tmp/docker-$VER.tgz https://download.docker.com/linux/static/stable/x86_64/docker-$VER.tgz
+            tar -xz -C /tmp -f /tmp/docker-$VER.tgz
+            mv /tmp/docker/* /usr/bin
+      - run: 
+          name: pip3 install dependencies
+          command: |
+            pip3 install -r requirements.txt
+      - run: 
+          name: Build and publish docker image
+          command: |
+            TAG="${CIRCLE_SHA1}"
+            docker build -t sptkl/edm-qaqc-app:$TAG .
+            docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
+            docker push sptkl/edm-qaqc-app:$TAG
+            docker tag sptkl/edm-qaqc-app:$TAG sptkl/edm-qaqc-app:latest
+            docker push sptkl/edm-qaqc-app:latest

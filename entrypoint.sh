@@ -1,0 +1,1 @@
+gunicorn app:app --bind=:8050 --workers=5 --threads=3
