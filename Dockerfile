@@ -6,6 +6,6 @@ COPY . .
 
 RUN pip3 install -r requirements.txt
 
-CMD ["sh", "entrypoint.sh"]
+CMD ["sh", "./entrypoint.sh"]
 
 EXPOSE 8050

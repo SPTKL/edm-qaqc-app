@@ -12,7 +12,10 @@ import json
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+import flask
+
+server = flask.Flask(__name__)
+app = dash.Dash(__name__, server=server, external_stylesheets=external_stylesheets)
 app.config.suppress_callback_exceptions = True
 
 versions = requests.get(f'{base_url}/pluto-qaqc/versions').json()['result']
@@ -84,4 +87,4 @@ def create_aggregate(version, condo):
     return make_aggregate(v1, v2, v3, condo)
 
 if __name__ == '__main__':
-    app.run_server(debug=False, port=8050)
+    app.run_server(debug=True, port=8050)
