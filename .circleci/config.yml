@@ -1,32 +1,13 @@
 version: 2
 
-# Run the welcome/run job in its own container
 jobs:
   build:
     docker:
-      - image: python:3.7-alpine
+        - image: docker:17.05.0-ce-git
     working_directory: ~/repo
 
     steps:
       - checkout
-      - run:
-          name: Install curl
-          command: |
-            apk add --update \
-            curl \
-            && rm -rf /var/cache/apk/*
-      - run:
-          name: Install Docker client
-          command: |
-            set -x
-            VER="19.03.1"
-            curl -L -o /tmp/docker-$VER.tgz https://download.docker.com/linux/static/stable/x86_64/docker-$VER.tgz
-            tar -xz -C /tmp -f /tmp/docker-$VER.tgz
-            mv /tmp/docker/* /usr/bin
-      - run: 
-          name: pip3 install dependencies
-          command: |
-            pip3 install -r requirements.txt
       - run: 
           name: Build and publish docker image
           command: |
