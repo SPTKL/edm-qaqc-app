@@ -53,7 +53,7 @@ def make_aggregate(v1, v2, v3, condo):
         ), 
         dash_table.DataTable(
             id='aggregate_table',
-            columns=[{"name": i, "id": i} for i in v1.keys()],
+            columns=[{"name": i, "id": i} for i in col_order],
             data=[v1, v2, v3],
         )
     ])
