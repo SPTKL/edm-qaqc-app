@@ -3,30 +3,42 @@ from utils.mismatch import make_mismatch
 from utils.null import make_null
 from utils.aggregate import make_aggregate
 from utils.url import base_url
+from utils.style import style
 from utils.layout import layout
-import dash
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
 import requests
+import dash
 import json
-
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
-
 import flask
 
+external_stylesheets = [
+    'https://nyc-planning-style-guide.netlify.com/assets/css/nyc-planning.css']
 server = flask.Flask(__name__)
-app = dash.Dash(__name__, server=server, external_stylesheets=external_stylesheets)
+app = dash.Dash(__name__, 
+                server=server,
+                meta_tags=[
+                    {'charset':'utf-8'},
+                    {'http-equiv': 'X-UA-Compatible','content': 'IE=edge'},
+                    {'name': 'viewport', 'content': 'width=device-width, initial-scale=1.0'}
+                ],
+                external_stylesheets=external_stylesheets)
 app.config.suppress_callback_exceptions = True
 
-versions = requests.get(f'{base_url}/pluto-qaqc/versions').json()['result']
-versions_options = [{'label': i['table_name'], 'value': i['table_name']} for i in versions]
 versions_order = [
             '18v2_1', 
             '19v1', '19v2', 
             '20v1', '20v2', '20v3', '20v4',
             '20v5', '20v6', '20v7', '20v8',
             '20v9', '20v10', '20v11', '20v12']
+app.title = 'EDM QAQC APP'
+app.head = [
+    html.Link(
+        href='https://use.fontawesome.com/releases/v5.8.2/css/all.css',
+        rel='stylesheet'
+    ),(style)
+]
 
 app.layout = layout
 
@@ -40,7 +52,7 @@ def display_versions(version):
             + __current__: {v1}
             + __previous__: {v2}
             + __previous previous__: {v3}
-    ''')
+    ''', className='no-bullet')
 
 @app.callback(Output('mismatch-area', 'children'),
               [Input('version', 'value'),
