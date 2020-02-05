@@ -36,6 +36,10 @@ body = html.Div([
     html.Div([
         html.Div([
             html.Div([
+                # we are using this empty div to request latest versions
+                # since the versions are loaded only once during start up,
+                # we need a way to refresh the drop downs to include latest
+                html.Div(id='none', children=[], style={'display': 'none'}),
                 html.H6('select version:'),
                 dcc.Dropdown(id='version',
                             options=versions_options,

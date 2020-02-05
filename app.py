@@ -42,6 +42,15 @@ app.head = [
 
 app.layout = layout
 
+@app.callback(
+        Output('version', 'options'),
+        [Input('none', 'children')]
+    )
+def refresh_options(none):
+    versions = requests.get(f'{base_url}/pluto-qaqc/versions').json()['result']
+    versions_options = [{'label': i['table_name'], 'value': i['table_name']} for i in versions]
+    return versions_options
+
 @app.callback(Output('version_info', 'children'),
             [Input('version', 'value')])
 def display_versions(version): 
