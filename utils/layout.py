@@ -39,7 +39,7 @@ body = html.Div([
                 html.H6('select version:'),
                 dcc.Dropdown(id='version',
                             options=versions_options,
-                            value='20v1'),
+                            value=versions[-1]['table_name']),
                 dcc.RadioItems(
                             options=[
                                 {'label': 'Condo', 'value': 'TRUE'},

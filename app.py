@@ -82,4 +82,4 @@ def create_aggregate(version, condo):
     return make_aggregate(v1, v2, v3, condo)
 
 if __name__ == '__main__':
-    app.run_server(debug=False, port=8050)
+    app.run_server(debug=True, port=8050)
